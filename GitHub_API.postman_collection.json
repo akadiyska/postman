@@ -1,0 +1,375 @@
+{
+	"info": {
+		"_postman_id": "1b1ae623-f3bd-46ee-8e8b-5549692f3930",
+		"name": "GitHub_API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25620539"
+	},
+	"item": [
+		{
+			"name": "Issues",
+			"item": [
+				{
+					"name": "GET",
+					"item": [
+						{
+							"name": "GET_Single_Issue",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Check status code\", function () {  //проверява дали статус кода е 200\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Check issue number\", function(){\r",
+											"   const body = pm.response.json(); //взимаме тялото\r",
+											"\r",
+											"   pm.expect(body.number, \"Number property\").to.be.equal(2); //проверява дали това issue 2\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Issue is open\", function(){   //тук тестваме, че статус кода е open\r",
+											"   var jsonData = pm.response.json();\r",
+											"   pm.expect(jsonData.state).to.equal(\"open\");\r",
+											"\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.github.com/repos/akadiyska/postman/issues/2",
+									"protocol": "https",
+									"host": [
+										"api",
+										"github",
+										"com"
+									],
+									"path": [
+										"repos",
+										"akadiyska",
+										"postman",
+										"issues",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET_Single_Issue_Lables",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"//вариант 2\r",
+											"\r",
+											"pm.test (\"Status code 200\", function(){\r",
+											"    pm.response.to.be.ok; // вариант\r",
+											"    pm.expect(pm.response.code).equals (200);   // вариант 1\r",
+											"    pm.expect(pm.response.code).to.be.equals(200); // вариант 2 може да се напише по този начин\r",
+											"    pm.expect(pm.response.code).to.be.equal(200); // вариант 3 или по този\r",
+											"\r",
+											"})\r",
+											"\r",
+											"//Проверяваме статус\r",
+											"pm.test (\"Status check\", function(){\r",
+											"    pm.expect(pm.response.status).equals (\"OK\");\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.github.com/repos/akadiyska/postman/issues/2/labels",
+									"protocol": "https",
+									"host": [
+										"api",
+										"github",
+										"com"
+									],
+									"path": [
+										"repos",
+										"akadiyska",
+										"postman",
+										"issues",
+										"2",
+										"labels"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET_All_Issues",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test (\"Check- if response is an array of issues\", function() {\r",
+											"   const body = pm.response.json();\r",
+											"   console.log(\"BODY\", body); \r",
+											"   //в Console може да видим в тялото какво имаме\r",
+											"   pm.expect(Array.isArray (body));\r",
+											"\r",
+											"   for (let item of body) {\r",
+											"       pm.expect(typeof(item.title)).equals(\"string\");\r",
+											"       pm.expect(typeof(item.number)).equals(\"number\");\r",
+											"       // да вземем че номера  е равен на 6\r",
+											"       pm.expect(item.number, \"Issue number property\").is.greaterThan(0);\r",
+											"       // да видим че номера на всяко issue е по-голям от нула\r",
+											"   }\r",
+											"\r",
+											"})\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.github.com/repos/akadiyska/postman/issues",
+									"protocol": "https",
+									"host": [
+										"api",
+										"github",
+										"com"
+									],
+									"path": [
+										"repos",
+										"akadiyska",
+										"postman",
+										"issues"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "POST",
+					"item": [
+						{
+							"name": "Greate_Issue",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test (\"Check issue number and title\", function(){\r",
+											"    let body = pm.response.json();\r",
+											"\r",
+											"    pm.expect(body.number, \"Number property\").greaterThan(0);\r",
+											"     pm.expect(body.title, \"Title property\").equal(\"Forth issue 1\"); \r",
+											"     // в таб Body тялото добявам ново issue и взимам името за да го сложа на equal(\"Forth issue 1\" \r",
+											"\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "username",
+											"value": "akadiyska",
+											"type": "string"
+										},
+										{
+											"key": "password",
+											"value": "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",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"Forth issue 1\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://api.github.com/repos/akadiyska/postman/issues/1",
+									"protocol": "https",
+									"host": [
+										"api",
+										"github",
+										"com"
+									],
+									"path": [
+										"repos",
+										"akadiyska",
+										"postman",
+										"issues",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Greate_Issue_With_Labels",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "username",
+											"value": "akadiyska",
+											"type": "string"
+										},
+										{
+											"key": "password",
+											"value": "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",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"Issue with labels\",\r\n    \"label\": [\"bug\", \"priority:critical\", \"moqtlabel\"]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://api.github.com/repos/akadiyska/postman/issues",
+									"protocol": "https",
+									"host": [
+										"api",
+										"github",
+										"com"
+									],
+									"path": [
+										"repos",
+										"akadiyska",
+										"postman",
+										"issues"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Greate_Issue_Missing_Title",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Repos",
+			"item": [
+				{
+					"name": "GET",
+					"item": [
+						{
+							"name": "GET_All_Repos",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.github.com/users/akadiyska/repos",
+									"protocol": "https",
+									"host": [
+										"api",
+										"github",
+										"com"
+									],
+									"path": [
+										"users",
+										"akadiyska",
+										"repos"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET_Single_Repo",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {  //проверяваме, че статус кода е 200\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Check repo name\", function(){\r",
+											"    const body = pm.response.json();\r",
+											"    //че бодито e json\r",
+											"    pm.expect(body.name, \"Name property\").equals (\"postman\");\r",
+											"})\r",
+											"\r",
+											"//искам да проверя, че името на това репо е = postman \"name\": \"postman\""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.github.com/repos/akadiyska/postman",
+									"protocol": "https",
+									"host": [
+										"api",
+										"github",
+										"com"
+									],
+									"path": [
+										"repos",
+										"akadiyska",
+										"postman"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}
